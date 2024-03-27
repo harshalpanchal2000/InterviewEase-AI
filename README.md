@@ -36,5 +36,5 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Acknowledgements
 
-Interview Ease AI was created by [Harshal Panchal]. 
+Interview Ease AI was created by Harshal Panchal. 
 
