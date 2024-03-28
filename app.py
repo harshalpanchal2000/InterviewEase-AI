@@ -1,5 +1,6 @@
 import streamlit as st
 import random
+import csv
 
 # Define question pools for each level
 junior_questions = [
@@ -52,7 +53,7 @@ def display_question(questions, session_state):
     current_question = questions[session_state["question_index"]]
     st.subheader(f"Question {session_state['question_index'] + 1}")
     st.write(current_question)
-    answer = st.text_area("Your Answer:")
+    answer = st.text_area("Your Answer:", value="")
     
     if st.button("Submit"):
         session_state["answers"].append(answer)
@@ -64,6 +65,18 @@ def display_responses(answers):
     st.header("Your Responses")
     for i, answer in enumerate(answers, start=1):
         st.write(f"Response {i}: {answer}")
+
+    if st.button("Save Responses"):
+        save_responses(answers)
+
+def save_responses(answers):
+    filename = "interview_responses.csv"
+    with open(filename, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Question", "Response"])
+        for i, answer in enumerate(answers, start=1):
+            writer.writerow([f"Question {i}", answer])
+    st.write(f"Responses saved to {filename}")
 
 if __name__ == "__main__":
     main()
