@@ -34,11 +34,11 @@ def main():
     position = st.sidebar.radio("", ("Junior", "Mid-Level", "Senior"))
 
     if position == "Junior":
-        questions = junior_questions
+        questions = random.sample(junior_questions, 4)
     elif position == "Mid-Level":
-        questions = mid_level_questions
+        questions = random.sample(mid_level_questions, 4)
     elif position == "Senior":
-        questions = senior_questions
+        questions = random.sample(senior_questions, 4)
 
     session_state = st.session_state.setdefault("session_state", {"question_index": 0, "start_time": 0})
 
@@ -59,9 +59,9 @@ def display_question(questions, session_state):
             st.experimental_rerun()
     
     if session_state["start_time"] == 0:
-        session_state["start_time"] = st.session_state["_st_to_session_ctx"]._get_now_ms() / 1000
+        session_state["start_time"] = st.session_state["_session_params"]["reportStartMs"] / 1000
     
-    remaining_time = max(0, 120 - (st.session_state["_st_to_session_ctx"]._get_now_ms() / 1000 - session_state["start_time"]))
+    remaining_time = max(0, 120 - (st.session_state["_session_params"]["reportStartMs"] / 1000 - session_state["start_time"]))
     st.write(f"Time Left: {int(remaining_time)} seconds")
 
 if __name__ == "__main__":
