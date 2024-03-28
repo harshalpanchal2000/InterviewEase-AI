@@ -33,14 +33,11 @@ def main():
     position = st.radio("Select Position Level:", ("Junior", "Mid-Level", "Senior"))
 
     if position == "Junior":
-        user_responses = display_questions(junior_questions, position)
+        display_questions(junior_questions, position)
     elif position == "Mid-Level":
-        user_responses = display_questions(mid_level_questions, position)
+        display_questions(mid_level_questions, position)
     elif position == "Senior":
-        user_responses = display_questions(senior_questions, position)
-
-    # Output all user responses
-    st.write("User Responses:", user_responses)
+        display_questions(senior_questions, position)
 
 def display_questions(question_pool, position):
     st.header(f"{position} Level Questions")
@@ -54,9 +51,10 @@ def display_questions(question_pool, position):
         answer = st.text_area(f"Your Answer for Question {i}:")  # Unique key for each text area
         user_responses[f"Question {i}"] = answer
 
-    # Add a submit button after all questions
-    if st.button("Submit"):
-        st.write("All Answers Submitted!")
+        # Add a submit button after each question
+        if st.button("Submit"):
+            st.write(f"Your Answer for Question {i}: {answer}")
+            st.write("Answer Submitted!")
 
     return user_responses
 
