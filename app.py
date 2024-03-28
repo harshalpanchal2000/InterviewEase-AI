@@ -1,4 +1,24 @@
 import streamlit as st
+import random
+
+# Define question pools for each level
+junior_questions = [
+    "What is the Central Limit Theorem?",
+    "Explain the concept of overfitting in machine learning.",
+    "What is the difference between supervised and unsupervised learning?"
+]
+
+mid_level_questions = [
+    "What is regularization in machine learning?",
+    "Explain the bias-variance tradeoff.",
+    "What are the assumptions of linear regression?"
+]
+
+senior_questions = [
+    "What is deep learning and how does it differ from traditional machine learning?",
+    "What are some common techniques for dimensionality reduction?",
+    "Explain the concept of ensemble learning."
+]
 
 def main():
     st.title("Interview Ease AI")
@@ -7,53 +27,21 @@ def main():
     position = st.radio("Select Position Level:", ("Junior", "Mid-Level", "Senior"))
 
     if position == "Junior":
-        # Display junior-level questions
-        display_junior_questions()
+        display_questions(junior_questions)
     elif position == "Mid-Level":
-        # Display mid-level questions
-        display_mid_level_questions()
+        display_questions(mid_level_questions)
     elif position == "Senior":
-        # Display senior-level questions
-        display_senior_questions()
+        display_questions(senior_questions)
 
-def display_junior_questions():
-    st.header("Junior Level Questions")
+def display_questions(question_pool):
+    st.header(f"{position} Level Questions")
 
-    # Display theoretical questions
-    for i in range(3):
-        st.write(f"Theoretical Question {i+1}: ")
-
-    # Display coding question
-    st.write("Coding Question: ")
-
-    # Display past experience question
-    st.write("Past Experience Question: ")
-
-def display_mid_level_questions():
-    st.header("Mid-Level Questions")
-
-    # Display theoretical questions
-    for i in range(3):
-        st.write(f"Theoretical Question {i+1}: ")
-
-    # Display coding question
-    st.write("Coding Question: ")
-
-    # Display past experience question
-    st.write("Past Experience Question: ")
-
-def display_senior_questions():
-    st.header("Senior Level Questions")
-
-    # Display theoretical questions
-    for i in range(3):
-        st.write(f"Theoretical Question {i+1}: ")
-
-    # Display coding question
-    st.write("Coding Question: ")
-
-    # Display past experience question
-    st.write("Past Experience Question: ")
+    # Display questions one by one
+    for i, question in enumerate(question_pool, start=1):
+        st.subheader(f"Question {i}")
+        st.write(question)
+        answer = st.text_area("Your Answer:")
+        st.write(f"Your Answer: {answer}")
 
 if __name__ == "__main__":
     main()
