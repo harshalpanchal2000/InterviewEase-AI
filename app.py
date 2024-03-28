@@ -40,7 +40,7 @@ def main():
     elif position == "Senior":
         questions = senior_questions
 
-    session_state = st.session_state.setdefault("session_state", {"question_index": 0})
+    session_state = st.session_state.setdefault("session_state", {"question_index": 0, "start_time": 0})
 
     display_question(questions, session_state)
 
@@ -50,31 +50,19 @@ def display_question(questions, session_state):
     st.subheader(f"Question {session_state['question_index'] + 1}")
     st.write(current_question)
     answer = st.text_area("Your Answer:")
+    
     if st.button("Submit"):
         st.write(f"Your Answer for Question {session_state['question_index'] + 1}: {answer}")
         session_state["question_index"] += 1
+        session_state["start_time"] = 0  # Reset start time
         if session_state["question_index"] < len(questions):
             st.experimental_rerun()
-
-    remaining_time_script = f"""
-        <script>
-            var seconds_left = 120;
-            function countdown() {{
-                var countdown_timer = document.getElementById("countdown");
-                if (seconds_left <= 0) {{
-                    countdown_timer.innerHTML = "Time's up!";
-                }} else {{
-                    countdown_timer.innerHTML = "Time Left: " + seconds_left + " seconds";
-                    seconds_left -= 1;
-                    setTimeout(countdown, 1000);
-                }}
-            }}
-            countdown();
-        </script>
-    """
-    st.markdown(remaining_time_script, unsafe_allow_html=True)
-    st.markdown("<div id='countdown'></div>", unsafe_allow_html=True)
+    
+    if session_state["start_time"] == 0:
+        session_state["start_time"] = st.session_state["_st_to_session_ctx"]._get_now_ms() / 1000
+    
+    remaining_time = max(0, 120 - (st.session_state["_st_to_session_ctx"]._get_now_ms() / 1000 - session_state["start_time"]))
+    st.write(f"Time Left: {int(remaining_time)} seconds")
 
 if __name__ == "__main__":
     main()
-
