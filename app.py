@@ -33,8 +33,6 @@ def main():
     st.sidebar.title("Select Position Level")
     position = st.sidebar.radio("", ("Junior", "Mid-Level", "Senior"))
 
-    st.title("Interview Ease AI")
-
     if position == "Junior":
         user_responses = display_questions(junior_questions, position)
     elif position == "Mid-Level":
@@ -71,3 +69,5 @@ def evaluate_responses(user_responses):
 
 if __name__ == "__main__":
     main()
+
+
