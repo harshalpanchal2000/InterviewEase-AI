@@ -51,13 +51,12 @@ def display_questions(question_pool, position):
         st.write(question)
         answer = st.text_area(f"Your Answer for Question {i}:")  # Unique key for each text area
         user_responses[f"Question {i}"] = answer
-
         # Add a submit button after each question
         if st.button("Submit"):
             st.write(f"Your Answer for Question {i}: {answer}")
             st.write("Answer Submitted!")
-
-    return user_responses
+            return user_responses
+    
 
 if __name__ == "__main__":
     main()
