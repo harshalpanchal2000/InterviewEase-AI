@@ -1,5 +1,6 @@
 import streamlit as st
 import random
+import time
 
 # Define question pools for each level
 junior_questions = [
@@ -34,40 +35,32 @@ def main():
     position = st.sidebar.radio("", ("Junior", "Mid-Level", "Senior"))
 
     if position == "Junior":
-        user_responses = display_questions(junior_questions, position)
+        questions = junior_questions
     elif position == "Mid-Level":
-        user_responses = display_questions(mid_level_questions, position)
+        questions = mid_level_questions
     elif position == "Senior":
-        user_responses = display_questions(senior_questions, position)
+        questions = senior_questions
 
-    # Evaluate user responses and assign scores
-    score = evaluate_responses(user_responses)
-    st.write(f"Your interview score: {score}")
+    session_state = st.session_state.setdefault("session_state", {"question_index": 0})
 
-def display_questions(question_pool, position):
-    st.header(f"{position} Level Questions")
+    display_question(questions, session_state)
 
-    user_responses = {}
-
-    # Display questions one by one
-    for i, question in enumerate(question_pool, start=1):
-        st.subheader(f"Question {i}")
-        st.write(question)
-        answer = st.text_area(f"Your Answer for Question {i}:")  # Unique key for each text area
-        user_responses[f"Question {i}"] = answer
-
-        # Add a submit button after each question
-        if st.button("Submit"):
-            st.write(f"Your Answer for Question {i}: {answer}")
-            st.write("Answer Submitted!")
-
-    return user_responses
-
-def evaluate_responses(user_responses):
-    # Dummy scoring function
-    return len(user_responses)
+def display_question(questions, session_state):
+    st.header("Interview Questions")
+    current_question = questions[session_state["question_index"]]
+    st.subheader(f"Question {session_state['question_index'] + 1}")
+    st.write(current_question)
+    answer = st.text_area("Your Answer:")
+    start_time = time.time()
+    if st.button("Submit"):
+        elapsed_time = time.time() - start_time
+        if elapsed_time > 120:
+            st.error("Time's up! Your answer must be submitted within 2 minutes.")
+        else:
+            st.write(f"Your Answer for Question {session_state['question_index'] + 1}: {answer}")
+            session_state["question_index"] += 1
+            if session_state["question_index"] < len(questions):
+                st.experimental_rerun()
 
 if __name__ == "__main__":
     main()
-
-
