@@ -61,6 +61,11 @@ def display_question(questions, session_state):
             session_state["question_index"] += 1
             if session_state["question_index"] < len(questions):
                 st.experimental_rerun()
+                
+        st.empty()
+    else:
+        remaining_time = max(0, 120 - int(time.time() - start_time))
+        st.write(f"Time Left: {remaining_time} seconds")
 
 if __name__ == "__main__":
     main()
