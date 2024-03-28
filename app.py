@@ -1,6 +1,5 @@
 import streamlit as st
 import random
-import time
 
 # Define question pools for each level
 junior_questions = [
@@ -51,21 +50,31 @@ def display_question(questions, session_state):
     st.subheader(f"Question {session_state['question_index'] + 1}")
     st.write(current_question)
     answer = st.text_area("Your Answer:")
-    start_time = time.time()
     if st.button("Submit"):
-        elapsed_time = time.time() - start_time
-        if elapsed_time > 120:
-            st.error("Time's up! Your answer must be submitted within 2 minutes.")
-        else:
-            st.write(f"Your Answer for Question {session_state['question_index'] + 1}: {answer}")
-            session_state["question_index"] += 1
-            if session_state["question_index"] < len(questions):
-                st.experimental_rerun()
-                
-        st.empty()
-    else:
-        remaining_time = max(0, 120 - int(time.time() - start_time))
-        st.write(f"Time Left: {remaining_time} seconds")
+        st.write(f"Your Answer for Question {session_state['question_index'] + 1}: {answer}")
+        session_state["question_index"] += 1
+        if session_state["question_index"] < len(questions):
+            st.experimental_rerun()
+
+    remaining_time_script = f"""
+        <script>
+            var seconds_left = 120;
+            function countdown() {{
+                var countdown_timer = document.getElementById("countdown");
+                if (seconds_left <= 0) {{
+                    countdown_timer.innerHTML = "Time's up!";
+                }} else {{
+                    countdown_timer.innerHTML = "Time Left: " + seconds_left + " seconds";
+                    seconds_left -= 1;
+                    setTimeout(countdown, 1000);
+                }}
+            }}
+            countdown();
+        </script>
+    """
+    st.markdown(remaining_time_script, unsafe_allow_html=True)
+    st.markdown("<div id='countdown'></div>", unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
+
