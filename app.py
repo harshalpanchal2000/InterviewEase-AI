@@ -28,6 +28,7 @@ senior_questions = [
 
 def main():
     st.title("Interview Ease AI")
+    st.write("Welcome to Interview Ease AI, your ultimate solution for data scientist hiring! With customizable interview templates and advanced NLP analysis, streamline your hiring process effortlessly. Say hello to a new era of interviews.")
 
     # Position level selection
     position = st.radio("Select Position Level:", ("Junior", "Mid-Level", "Senior"))
