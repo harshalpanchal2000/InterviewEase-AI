@@ -27,18 +27,22 @@ senior_questions = [
 ]
 
 def main():
+    st.sidebar.title("Select Position Level")
+    position = st.sidebar.radio("", ("Junior", "Mid-Level", "Senior"))
+
     st.title("Interview Ease AI")
     st.write("Welcome to Interview Ease AI, your ultimate solution for data scientist hiring! With customizable interview templates and advanced NLP analysis, streamline your hiring process effortlessly. Say hello to a new era of interviews.")
 
-    # Position level selection
-    position = st.radio("Select Position Level:", ("Junior", "Mid-Level", "Senior"))
-
     if position == "Junior":
-        display_questions(junior_questions, position)
+        user_responses = display_questions(junior_questions, position)
     elif position == "Mid-Level":
-        display_questions(mid_level_questions, position)
+        user_responses = display_questions(mid_level_questions, position)
     elif position == "Senior":
-        display_questions(senior_questions, position)
+        user_responses = display_questions(senior_questions, position)
+
+    # Evaluate user responses and assign scores
+    score = evaluate_responses(user_responses)
+    st.write(f"Your interview score: {score}")
 
 def display_questions(question_pool, position):
     st.header(f"{position} Level Questions")
@@ -51,12 +55,17 @@ def display_questions(question_pool, position):
         st.write(question)
         answer = st.text_area(f"Your Answer for Question {i}:")  # Unique key for each text area
         user_responses[f"Question {i}"] = answer
+
         # Add a submit button after each question
         if st.button("Submit"):
             st.write(f"Your Answer for Question {i}: {answer}")
             st.write("Answer Submitted!")
-            return user_responses
-    
+
+    return user_responses
+
+def evaluate_responses(user_responses):
+    # Dummy scoring function
+    return len(user_responses)
 
 if __name__ == "__main__":
     main()
