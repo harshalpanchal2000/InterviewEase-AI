@@ -27,13 +27,13 @@ def main():
     position = st.radio("Select Position Level:", ("Junior", "Mid-Level", "Senior"))
 
     if position == "Junior":
-        display_questions(junior_questions)
+        display_questions(junior_questions, position)
     elif position == "Mid-Level":
-        display_questions(mid_level_questions)
+        display_questions(mid_level_questions, position)
     elif position == "Senior":
-        display_questions(senior_questions)
+        display_questions(senior_questions, position)
 
-def display_questions(question_pool):
+def display_questions(question_pool, position):
     st.header(f"{position} Level Questions")
 
     # Display questions one by one
