@@ -40,8 +40,8 @@ def display_questions(question_pool, position):
     for i, question in enumerate(question_pool, start=1):
         st.subheader(f"Question {i}")
         st.write(question)
-        answer = st.text_area("Your Answer:")
-        st.write(f"Your Answer: {answer}")
+        answer = st.text_area(f"Your Answer for Question {i}:")  # Unique key for each text area
+        st.write(f"Your Answer for Question {i}: {answer}")
 
 if __name__ == "__main__":
     main()
