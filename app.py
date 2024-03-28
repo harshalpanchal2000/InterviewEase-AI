@@ -40,7 +40,7 @@ def main():
     elif position == "Senior":
         questions = random.sample(senior_questions, 4)
 
-    session_state = st.session_state.setdefault("session_state", {"question_index": 0, "start_time": 0})
+    session_state = st.session_state.get("session_state", {"question_index": 0, "start_time": 0})
 
     display_question(questions, session_state)
 
@@ -59,9 +59,9 @@ def display_question(questions, session_state):
             st.experimental_rerun()
     
     if session_state["start_time"] == 0:
-        session_state["start_time"] = st.session_state["_session_params"]["reportStartMs"] / 1000
+        session_state["start_time"] = st.session_state["_session_params"]["start_time"] / 1000
     
-    remaining_time = max(0, 120 - (st.session_state["_session_params"]["reportStartMs"] / 1000 - session_state["start_time"]))
+    remaining_time = max(0, 120 - (st.session_state["_session_params"]["start_time"] / 1000 - session_state["start_time"]))
     st.write(f"Time Left: {int(remaining_time)} seconds")
 
 if __name__ == "__main__":
