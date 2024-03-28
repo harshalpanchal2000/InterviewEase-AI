@@ -43,16 +43,16 @@ def main():
 
     session_state = st.session_state.get("session_state", {"question_index": 0, "answers": []})
 
-    if session_state["question_index"] < len(questions):
-        display_question(questions, session_state)
-    else:
+    for i, question in enumerate(questions, start=1):
+        display_question(i, question, session_state)
+
+    if session_state["question_index"] == 4:
         display_responses(session_state["answers"])
 
-def display_question(questions, session_state):
+def display_question(question_number, question, session_state):
     st.header("Interview Questions")
-    current_question = questions[session_state["question_index"]]
-    st.subheader(f"Question {session_state['question_index'] + 1}")
-    st.write(current_question)
+    st.subheader(f"Question {question_number}")
+    st.write(question)
     answer = st.text_area("Your Answer:", value="")
     
     if st.button("Submit"):
