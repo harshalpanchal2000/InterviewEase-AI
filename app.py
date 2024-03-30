@@ -34,12 +34,14 @@ def main():
     st.sidebar.title("Select Position Level")
     position = st.sidebar.radio("", ("Junior", "Mid-Level", "Senior"))
 
+    questions = questions[]
+    
     if position == "Junior":
-        questions = junior_questions[]
+        questions = junior_questions
     elif position == "Mid-Level":
-        questions = mid_level_questions[]
+        questions = mid_level_questions
     elif position == "Senior":
-        questions = senior_questions[]
+        questions = senior_questions
 
     session_state = st.session_state.get("session_state", {"question_index": 0, "answers": []})
 
