@@ -1,4 +1,4 @@
-import st
+import streamlit as st
 import csv
 
 def main():
