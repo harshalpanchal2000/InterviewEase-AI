@@ -1,5 +1,6 @@
 import streamlit as st
 import csv
+import random 
 
 def main():
     st.sidebar.title("Interview Ease AI")
