@@ -51,11 +51,12 @@ def main():
 def display_question(questions, session_state):
     st.header("Interview Questions")
     current_question = questions[session_state["question_index"]]
-    st.subheader(f"Question {session_state['question_index'] + 1}")
+    #st.subheader(f"Question {session_state['question_index'] + 1}")
     st.write(current_question)
     answer = st.text_area("Your Answer:", value="")
     
     if st.button("Submit"):
+        st.subheader(f"Question {session_state['question_index'] + 1}")
         session_state["answers"].append(answer)
         session_state["question_index"] += 1
         if session_state["question_index"] < 4:
