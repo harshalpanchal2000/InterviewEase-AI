@@ -57,8 +57,7 @@ def display_question(questions, session_state):
     if st.button("Submit"):
         session_state["answers"].append(answer)
         session_state["question_index"] += 1
-        if session_state["question_index"] < len(questions):
-            st.experimental_rerun()
+        st.experimental_rerun()
 
     if session_state["question_index"] == len(questions):
         display_responses(session_state["answers"])
