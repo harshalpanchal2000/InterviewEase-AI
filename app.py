@@ -5,7 +5,7 @@ def main():
     st.sidebar.title("Interview Ease AI")
     st.sidebar.write("Welcome to Interview Ease AI, your ultimate solution for data scientist hiring! With customizable interview templates and advanced NLP analysis, streamline your hiring process effortlessly. Say hello to a new era of interviews.")
 
-    st.sidebar.subtitle("Select Position Level")
+    st.sidebar.title("Select Position Level")
     position = st.sidebar.radio("", ("Junior", "Mid-Level", "Senior"))
 
     if position == "Junior":
