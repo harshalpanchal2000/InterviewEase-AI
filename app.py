@@ -35,11 +35,11 @@ def main():
     position = st.sidebar.radio("", ("Junior", "Mid-Level", "Senior"))
 
     if position == "Junior":
-        questions = random.sample(junior_questions, 4)
+        questions = junior_questions
     elif position == "Mid-Level":
-        questions = random.sample(mid_level_questions, 4)
+        questions = mid_level_questions
     elif position == "Senior":
-        questions = random.sample(senior_questions, 4)
+        questions = senior_questions
 
     session_state = st.session_state.get("session_state", {"question_index": 0, "answers": []})
 
