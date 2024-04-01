@@ -1,9 +1,7 @@
 import streamlit as st
 import random 
 import pandas as pd
-
-# Define your questions lists here: junior_questions, mid_level_questions, senior_questions
-# Define your correct answers lists here: junior_correct_answers, mid_level_correct_answers, senior_correct_answers
+from model import junior_questions, mid_level_questions, senior_questions, junior_answers, mid_level_answers, senior_answers
 
 def main():
     st.sidebar.title("Interview Ease AI")
@@ -14,13 +12,13 @@ def main():
 
     if position == "Junior":
         questions = random.sample(junior_questions, 4)
-        correct_answers = random.sample(junior_correct_answers, 4)
+        correct_answers = random.sample(junior_answers, 4)
     elif position == "Mid-Level":
         questions = random.sample(mid_level_questions, 4)
-        correct_answers = random.sample(mid_level_correct_answers, 4)
+        correct_answers = random.sample(mid_level_answers, 4)
     elif position == "Senior":
         questions = random.sample(senior_questions, 4)
-        correct_answers = random.sample(senior_correct_answers, 4)
+        correct_answers = random.sample(senior_answers, 4)
 
     session_state = st.session_state.get("session_state", {"question_index": 0, "answers": [], "show_questions": True})
 
