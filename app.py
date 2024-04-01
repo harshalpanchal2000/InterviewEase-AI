@@ -41,10 +41,14 @@ def main():
     elif position == "Senior":
         questions = random.sample(senior_questions, 4)
 
-    session_state = st.session_state.get("session_state", {"question_index": 0, "answers": []})
+    session_state = st.session_state.get("session_state", {"question_index": 0, "answers": [], "show_questions": True})
 
-    if session_state["question_index"] < len(questions):
-        display_question(questions, session_state)
+    if session_state["show_questions"]:
+        if session_state["question_index"] < len(questions):
+            display_question(questions, session_state)
+        else:
+            session_state["show_questions"] = False
+            display_responses(session_state["answers"])
     else:
         display_responses(session_state["answers"])
 
@@ -57,11 +61,8 @@ def display_question(questions, session_state):
     if st.button("Submit"):
         session_state["answers"].append(answer)
         session_state["question_index"] += 1
-        if session_state["question_index"] < len(questions):
-            st.experimental_rerun()
-
-    if session_state["question_index"] == len(questions):
-        st.write("All questions have been answered. Please save your responses.")
+        st.session_state["session_state"] = session_state
+        st.experimental_rerun()
 
 def display_responses(answers):
     st.header("Your Responses")
