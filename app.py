@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from model import preprocess_text, vectorize_text, get_response
 
 # Load CSV files for each level
 junior_file = "Questions & Answers/junior_questions_answers.csv"
@@ -33,9 +34,9 @@ def main():
         else:
             session_state["show_questions"] = False
             save_responses(questions_df, session_state["answers"], position)
-            display_responses(session_state["answers"])
+            display_responses(session_state["answers"], questions_df, position)
     else:
-        display_responses(session_state["answers"])
+        display_responses(session_state["answers"], questions_df, position)
 
 def display_question(questions_df, session_state):
     st.header("Interview Questions")
@@ -49,10 +50,20 @@ def display_question(questions_df, session_state):
         st.session_state["session_state"] = session_state
         st.experimental_rerun()
 
-def display_responses(answers):
+def display_responses(answers, questions_df, position):
     st.header("Your Responses")
     for i, answer in enumerate(answers, start=1):
         st.write(f"Response {i}: {answer}")
+
+    # Preprocess user answers and compute similarity scores
+    preprocessed_answers = {question: preprocess_text(answer) for question, answer in zip(questions_df["Question"], answers)}
+    vectorizer = vectorize_text(preprocessed_answers.values())
+    answer_vectors = vectorizer.transform(preprocessed_answers.values())
+
+    correct_answers = questions_df["Answer"]
+    similarities = get_response(answer_vectors, correct_answers)
+    st.write("Similarity Scores:")
+    st.write(similarities)
 
 def save_responses(questions_df, answers, position):
     questions_df["Response"] = answers
