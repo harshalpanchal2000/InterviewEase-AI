@@ -1,7 +1,19 @@
 import streamlit as st
-import random 
 import pandas as pd
-from model import junior_questions, mid_level_questions, senior_questions, junior_answers, mid_level_answers, senior_answers
+
+# Load CSV files for each level
+junior_file = "junior_questions_answers.csv"
+mid_level_file = "mid_level_questions_answers.csv"
+senior_file = "senior_questions_answers.csv"
+
+# Define function to load CSV file based on level
+def load_questions(level):
+    if level == "Junior":
+        return pd.read_csv(junior_file)
+    elif level == "Mid-Level":
+        return pd.read_csv(mid_level_file)
+    elif level == "Senior":
+        return pd.read_csv(senior_file)
 
 def main():
     st.sidebar.title("Interview Ease AI")
@@ -10,31 +22,25 @@ def main():
     st.sidebar.title("Select Position Level")
     position = st.sidebar.radio("", ("Junior", "Mid-Level", "Senior"))
 
-    if position == "Junior":
-        questions = random.sample(junior_questions, 4)
-        correct_answers = random.sample(junior_answers, 4)
-    elif position == "Mid-Level":
-        questions = random.sample(mid_level_questions, 4)
-        correct_answers = random.sample(mid_level_answers, 4)
-    elif position == "Senior":
-        questions = random.sample(senior_questions, 4)
-        correct_answers = random.sample(senior_answers, 4)
+    # Load questions based on selected level
+    questions_df = load_questions(position)
 
     session_state = st.session_state.get("session_state", {"question_index": 0, "answers": [], "show_questions": True})
 
     if session_state["show_questions"]:
-        if session_state["question_index"] < len(questions):
-            display_question(questions, session_state)
+        if session_state["question_index"] < len(questions_df):
+            display_question(questions_df, session_state)
         else:
             session_state["show_questions"] = False
-            display_responses(session_state["answers"], correct_answers)
+            save_responses(questions_df, session_state["answers"], position)
+            display_responses(session_state["answers"])
     else:
-        display_responses(session_state["answers"], correct_answers)
+        display_responses(session_state["answers"])
 
-def display_question(questions, session_state):
+def display_question(questions_df, session_state):
     st.header("Interview Questions")
-    current_question = questions[session_state["question_index"]]
-    st.write(current_question)
+    current_question = questions_df.iloc[session_state["question_index"]]
+    st.write(current_question["Question"])
     answer = st.text_area("Your Answer:", value="")
     
     if st.button("Submit"):
@@ -43,23 +49,15 @@ def display_question(questions, session_state):
         st.session_state["session_state"] = session_state
         st.experimental_rerun()
 
-def display_responses(answers, correct_answers):
+def display_responses(answers):
     st.header("Your Responses")
-    for i, (answer, correct_answer) in enumerate(zip(answers, correct_answers), start=1):
-        st.write(f"Question {i}:")
-        st.write(f"Your Response: {answer}")
-        st.write(f"Correct Answer: {correct_answer}")
-        st.write("---")
+    for i, answer in enumerate(answers, start=1):
+        st.write(f"Response {i}: {answer}")
 
-    if st.button("Save Responses"):
-        save_responses(answers, correct_answers)
-
-def save_responses(answers, correct_answers):
-    df = pd.DataFrame({"Question": [f"Question {i}" for i in range(1, len(answers)+1)], 
-                       "Your Response": answers,
-                       "Correct Answer": correct_answers})
-    df.to_csv("responses.csv", index=False)
-    st.write("Responses saved to responses.csv")
+def save_responses(questions_df, answers, position):
+    questions_df["Response"] = answers
+    questions_df.to_csv(f"{position.lower()}_responses.csv", index=False)
+    st.write("Responses saved to CSV")
 
 if __name__ == "__main__":
     main()
