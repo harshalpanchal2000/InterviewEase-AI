@@ -2,9 +2,9 @@ import streamlit as st
 import pandas as pd
 
 # Load CSV files for each level
-junior_file = "junior_questions_answers.csv"
-mid_level_file = "mid_level_questions_answers.csv"
-senior_file = "senior_questions_answers.csv"
+junior_file = "Questions & Answers/junior_questions_answers.csv"
+mid_level_file = "Questions & Answers/mid_level_questions_answers.csv"
+senior_file = "Questions & Answers/senior_questions_answers.csv"
 
 # Define function to load CSV file based on level
 def load_questions(level):
