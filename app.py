@@ -11,7 +11,7 @@ junior_questions = [
     "What is the difference between supervised and unsupervised learning?"
 ]
 
-mid_level_questions = [
+mid_level_questions = [         
     "What is regularization in machine learning?",
     "Explain the bias-variance tradeoff.",
     "What are the assumptions of linear regression?",
@@ -71,5 +71,5 @@ def display_responses(responses):
         # Perform any further evaluation or processing here
         st.write("Responses saved for evaluation.")
 
-if _name_ == "_main_":
+if _name_ == "__main__":
     main()
