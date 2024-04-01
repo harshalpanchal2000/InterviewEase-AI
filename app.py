@@ -1,5 +1,5 @@
 import streamlit as st
-import csv
+import pandas as pd
 import random 
 
 # Define question pools for each level
@@ -34,8 +34,6 @@ def main():
     st.sidebar.title("Select Position Level")
     position = st.sidebar.radio("", ("Junior", "Mid-Level", "Senior"))
 
-    questions = questions[]
-    
     if position == "Junior":
         questions = junior_questions
     elif position == "Mid-Level":
@@ -43,12 +41,12 @@ def main():
     elif position == "Senior":
         questions = senior_questions
 
-    session_state = st.session_state.get("session_state", {"question_index": 0, "answers": []})
+    session_state = st.session_state.get("session_state", {"question_index": 0, "responses": []})
 
     if session_state["question_index"] < len(questions):
         display_question(questions, session_state)
     else:
-        display_responses(session_state["answers"])
+        display_responses(session_state["responses"])
 
 def display_question(questions, session_state):
     st.header("Interview Questions")
@@ -57,29 +55,21 @@ def display_question(questions, session_state):
     answer = st.text_area("Your Answer:", value="")
     
     if st.button("Submit"):
-        session_state["answers"].append(answer)
+        session_state["responses"].append(answer)
         session_state["question_index"] += 1
         st.experimental_rerun()
 
     if session_state["question_index"] == len(questions):
-        display_responses(session_state["answers"])
+        display_responses(session_state["responses"])
 
-def display_responses(answers):
+def display_responses(responses):
     st.header("Your Responses")
-    for i, answer in enumerate(answers, start=1):
-        st.write(f"Response {i}: {answer}")
+    df = pd.DataFrame({"Question": range(1, len(responses) + 1), "Response": responses})
+    st.dataframe(df)
 
     if st.button("Save Responses"):
-        save_responses(answers)
-
-def save_responses(answers):
-    filename = "interview_responses.csv"
-    with open(filename, mode='w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(["Question", "Response"])
-        for i, answer in enumerate(answers, start=1):
-            writer.writerow([f"Question {i}", answer])
-    st.write(f"Responses saved to {filename}")
+        # Perform any further evaluation or processing here
+        st.write("Responses saved for evaluation.")
 
 if __name__ == "__main__":
     main()
