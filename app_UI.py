@@ -1,5 +1,9 @@
 import streamlit as st
 import random 
+import pandas as pd
+
+# Define your questions lists here: junior_questions, mid_level_questions, senior_questions
+# Define your correct answers lists here: junior_correct_answers, mid_level_correct_answers, senior_correct_answers
 
 def main():
     st.sidebar.title("Interview Ease AI")
@@ -10,10 +14,13 @@ def main():
 
     if position == "Junior":
         questions = random.sample(junior_questions, 4)
+        correct_answers = random.sample(junior_correct_answers, 4)
     elif position == "Mid-Level":
         questions = random.sample(mid_level_questions, 4)
+        correct_answers = random.sample(mid_level_correct_answers, 4)
     elif position == "Senior":
         questions = random.sample(senior_questions, 4)
+        correct_answers = random.sample(senior_correct_answers, 4)
 
     session_state = st.session_state.get("session_state", {"question_index": 0, "answers": [], "show_questions": True})
 
@@ -22,9 +29,9 @@ def main():
             display_question(questions, session_state)
         else:
             session_state["show_questions"] = False
-            display_responses(session_state["answers"])
+            display_responses(session_state["answers"], correct_answers)
     else:
-        display_responses(session_state["answers"])
+        display_responses(session_state["answers"], correct_answers)
 
 def display_question(questions, session_state):
     st.header("Interview Questions")
@@ -38,22 +45,23 @@ def display_question(questions, session_state):
         st.session_state["session_state"] = session_state
         st.experimental_rerun()
 
-def display_responses(answers):
+def display_responses(answers, correct_answers):
     st.header("Your Responses")
-    for i, answer in enumerate(answers, start=1):
-        st.write(f"Response {i}: {answer}")
+    for i, (answer, correct_answer) in enumerate(zip(answers, correct_answers), start=1):
+        st.write(f"Question {i}:")
+        st.write(f"Your Response: {answer}")
+        st.write(f"Correct Answer: {correct_answer}")
+        st.write("---")
 
     if st.button("Save Responses"):
-        save_responses(answers)
+        save_responses(answers, correct_answers)
 
-def save_responses(answers):
-    if "responses_df" not in st.session_state:
-        st.session_state.responses_df = pd.DataFrame(columns=["Question", "Response"])
-    
-    for i, answer in enumerate(answers, start=1):
-        st.session_state.responses_df = st.session_state.responses_df.append({"Question": f"Question {i}", "Response": answer}, ignore_index=True)
-
-    st.write("Responses saved to DataFrame")
+def save_responses(answers, correct_answers):
+    df = pd.DataFrame({"Question": [f"Question {i}" for i in range(1, len(answers)+1)], 
+                       "Your Response": answers,
+                       "Correct Answer": correct_answers})
+    df.to_csv("responses.csv", index=False)
+    st.write("Responses saved to responses.csv")
 
 if __name__ == "__main__":
     main()
