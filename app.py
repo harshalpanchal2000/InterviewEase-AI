@@ -11,7 +11,7 @@ junior_questions = [
     "What is the difference between supervised and unsupervised learning?"
 ]
 
-mid_level_questions = [         
+mid_level_questions = [
     "What is regularization in machine learning?",
     "Explain the bias-variance tradeoff.",
     "What are the assumptions of linear regression?",
@@ -35,18 +35,18 @@ def main():
     position = st.sidebar.radio("", ("Junior", "Mid-Level", "Senior"))
 
     if position == "Junior":
-        questions = junior_questions
+        questions = random.sample(junior_questions, 4)
     elif position == "Mid-Level":
-        questions = mid_level_questions
+        questions = random.sample(mid_level_questions, 4)
     elif position == "Senior":
-        questions = senior_questions
+        questions = random.sample(senior_questions, 4)
 
-    session_state = st.session_state.get("session_state", {"question_index": 0, "responses": []})
+    session_state = st.session_state.get("session_state", {"question_index": 0, "answers": []})
 
     if session_state["question_index"] < len(questions):
         display_question(questions, session_state)
     else:
-        display_responses(session_state["responses"])
+        display_responses(session_state["answers"])
 
 def display_question(questions, session_state):
     st.header("Interview Questions")
@@ -55,21 +55,30 @@ def display_question(questions, session_state):
     answer = st.text_area("Your Answer:", value="")
     
     if st.button("Submit"):
-        session_state["responses"].append(answer)
+        session_state["answers"].append(answer)
         session_state["question_index"] += 1
-        st.experimental_rerun()
+        if session_state["question_index"] < len(questions):
+            st.experimental_rerun()
 
     if session_state["question_index"] == len(questions):
-        display_responses(session_state["responses"])
+        display_responses(session_state["answers"])
 
-def display_responses(responses):
+def display_responses(answers):
     st.header("Your Responses")
-    df = pd.DataFrame({"Question": range(1, len(responses) + 1), "Response": responses})
-    st.dataframe(df)
+    for i, answer in enumerate(answers, start=1):
+        st.write(f"Response {i}: {answer}")
 
     if st.button("Save Responses"):
-        # Perform any further evaluation or processing here
-        st.write("Responses saved for evaluation.")
+        save_responses(answers)
 
-if _name_ == "__main__":
+def save_responses(answers):
+    if "responses_df" not in st.session_state:
+        st.session_state.responses_df = pd.DataFrame(columns=["Question", "Response"])
+    
+    for i, answer in enumerate(answers, start=1):
+        st.session_state.responses_df = st.session_state.responses_df.append({"Question": f"Question {i}", "Response": answer}, ignore_index=True)
+
+    st.write("Responses saved to DataFrame")
+
+if __name__ == "__main__":
     main()
