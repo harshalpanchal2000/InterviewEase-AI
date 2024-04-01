@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from model import preprocess_text, vectorize_text, get_response
+from model import preprocess_text, get_response
 
 # Load CSV files for each level
 junior_file = "Questions & Answers/junior_questions_answers.csv"
