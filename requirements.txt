@@ -3,3 +3,5 @@ tensorflow
 pandas
 numpy
 nltk
+sklearn.feature_extraction.text
+sklearn.metrics.pairwise
