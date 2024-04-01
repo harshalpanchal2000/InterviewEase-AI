@@ -61,7 +61,7 @@ def display_question(questions, session_state):
             st.experimental_rerun()
 
     if session_state["question_index"] == len(questions):
-        display_responses(session_state["answers"])
+        st.write("All questions have been answered. Please save your responses.")
 
 def display_responses(answers):
     st.header("Your Responses")
